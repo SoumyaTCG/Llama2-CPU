@@ -9,10 +9,12 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s]: %(message)s:')
 list_of_files = [
     "src/__init__.py",
     "src/run_local.py",
+    "src/run_local1.py"
     "src/helper.py",
     "model/instruction.txt",
     "requirements.txt",
     "setup.py",
+    "app.py",
     "main.py",
     "research/trials.ipynb",
     "test.py"

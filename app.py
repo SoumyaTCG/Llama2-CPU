@@ -4,8 +4,12 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.llms import CTransformers
+from langchain.llms import CTransformers
 from src.helper import *
+from flask import Flask, render_template, jsonify, request
+
+
+app = Flask(__name__)
 
 
 #Load the PDF File
@@ -50,8 +54,27 @@ chain = RetrievalQA.from_chain_type(llm=llm,
 
 
 
-user_input = "Tell me about Rainfall Measurement of the paper"
 
 
-result=chain({'query':user_input})
-print(f"Answer:{result['result']}")
+@app.route('/', methods=["GET", "POST"])
+def index():
+    return render_template('index.html', **locals())
+
+
+
+@app.route('/chatbot', methods=["GET", "POST"])
+def chatbotResponse():
+
+    if request.method == 'POST':
+        user_input = request.form['question']
+        print(user_input)
+
+        result=chain({'query':user_input})
+        print(f"Answer:{result['result']}")
+
+    return jsonify({"response": str(result['result']) })
+
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port= 8080,debug=True)
